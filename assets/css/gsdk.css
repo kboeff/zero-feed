@@ -2023,3 +2023,11 @@ input.ct-red + span + label + span.switch-right {
 
   .btn.dropdown-toggle {
     margin-bottom: 0; } }
+/* woow, 2000 lines of css, here's my 2 cents */
+#profile, #logout, #feed {
+	display: hidden;
+}
+
+#fb-btn {
+	margin-top: 20px;
+}
