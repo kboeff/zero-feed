@@ -21,6 +21,119 @@
 	
 </head>
 <body>
+
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '520542105063142',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v3.1'
+    });
+      
+    
+	FB.getLoginStatus(function(response) {
+		statusChangeCallback(response);
+	});
+      
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+   
+   function statusChangeCallback(response) {
+	if(response.status == 'connected') {
+		console.log('Already logged in FB');
+		setElements(true);
+		testAPI(response.authResponse.accessToken);
+	} else {
+		console.log('Not logged');
+		setElements(false);
+	}
+   }
+   
+	function checkLoginState() {
+	  FB.getLoginStatus(function(response) {
+		statusChangeCallback(response);
+	  });
+	}
+	
+	function setElements(isLoggedIn) {
+		if(isLoggedIn) {
+			document.getElementById('profile').style.display = 'block';
+			document.getElementById('feed').style.display = 'block';
+			document.getElementById('fb-btn').style.display = 'none';
+			document.getElementById('logout').style.display = 'block';
+			// document.getElementById('logout').innerHTML 
+		} else {
+			document.getElementById('profile').style.display = 'none';
+			document.getElementById('feed').style.display = 'none';
+			document.getElementById('fb-btn').style.display = 'block';
+			document.getElementById('logout').style.display = 'none';
+		}		
+	}
+	
+	function logout() {
+		FB.logout(function(response) {
+		});
+		setElements(false);	 
+	}
+			
+	function testAPI(token) {
+		FB.api('/me?fields=name,email,birthday,location', { acess_token: token }, function(response) {
+			if(response && !response.error) {
+				//console.log(response);
+				buildProfile(response);
+			} else {
+				console.log("error:");
+			}
+		});
+		
+		FB.api('/me/feed', { acess_token: token }, function(response) {
+			if(response && !response.error) {
+				//console.log(response);
+				buildFeed(response);
+			} else {
+				console.log("error:");
+			}
+		});
+	}
+	
+	function buildProfile(user) {
+		let profile = `
+			<h3>${user.name}</h3>
+			<ul class="list-group">
+				<li class="list-group-item">User ID: ${user.id}</li>
+				<li class="list-group-item">Email: ${user.email}</li>
+				<li class="list-group-item">Birthday: ${user.birthday}</li>
+				<li class="list-group-item">Location: ${user.location.name}</li>
+			</ul>
+		`;
+		document.getElementById('profile').innerHTML = profile;
+	}
+	
+	function buildFeed(feed) {
+		let output = '<h3>Latest Posts</h3>';
+		for(let i in feed.data) {
+			if(feed.data[i].message) {
+				output += `
+					<div class="well">
+						${feed.data[i].message} <span>${feed.data[i].created_time}</span>
+					</div>
+				`;
+			}
+		}
+		
+		document.getElementById('feed').innerHTML = output;
+	}
+   
+</script>
 	<div id="navbar-full">
 		<div id="navbar">
 		<!--    
@@ -71,9 +184,13 @@
 					 </div> 
 				  </form>
 				  <ul class="nav navbar-nav navbar-right">
-						<li><a href="#gsdk">Register</a></li>
+						<li><a id="logout" href="#" onclick="logout()">Logout</a></li>
 						
-						<li><button href="#gsdk" class="btn btn-round btn-default">Sign in</button></li>
+						<li><fb:login-button 
+							  id="fb-btn"
+							  scope="public_profile,email, user_birthday, user_location, user_posts"
+							  onlogin="checkLoginState();">
+							</fb:login-button></li>
 				   </ul>
 				  
 				</div><!-- /.navbar-collapse -->
@@ -90,6 +207,7 @@
     <div class="container tim-container" style="max-width:800px; padding-top:100px">
        <h1 class="text-center">Zero Feed</h1>
 	   <h3 class="text-center">An antidote to social media chaos.</h3>
+	  
 	   <div class="space"></div>
 	   <div class="row">
             <div class="col-md-4 col-sm-6">
@@ -109,7 +227,13 @@
 <!-- end container -->
 </div>
 <!-- end main -->
-
+<div class="container">
+	<div id="profile"></div>
+	<div id="feed"></div>
+	
+	<div class="space"></div>
+	
+</div>
 
 <p class="text-center">Photos by Josh Spires and Jakob Owens on <a href="www.unsplash.com">Unsplash</a></p>
 
@@ -129,6 +253,6 @@
 	<script src="assets/js/gsdk-radio.js"></script>
 	<script src="assets/js/gsdk-bootstrapswitch.js"></script>
 	<script src="assets/js/get-shit-done.js"></script>
-	
+	<script src="assets/js/script.js"></script>
     <script src="assets/js/custom.js"></script>
 </html>
