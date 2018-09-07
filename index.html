@@ -22,7 +22,6 @@
 </head>
 <body>
 
-
 <script>
   window.fbAsyncInit = function() {
     FB.init({
@@ -155,23 +154,26 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				  </button>
-				  <a class="navbar-brand" href="#gsdk">GSDKit</a>
+				  <a class="navbar-brand" href="#gsdk">Home</a>
 				</div>
 			
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				  <ul class="nav navbar-nav">
-					<li class="active"><a href="#gsdk">Link</a></li>
 					<li class="dropdown">
-						  <a href="#gsdk" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+						  <a href="#gsdk" class="dropdown-toggle" data-toggle="dropdown">Social Media <b class="caret"></b></a>
 						  <ul class="dropdown-menu">
-							<li><a href="#gsdk">Action</a></li>
-							<li><a href="#gsdk">Another action</a></li>
-							<li><a href="#gsdk">Something</a></li>
-							<li><a href="#gsdk">Another action</a></li>
-							<li><a href="#gsdk">Something</a></li>
+							<li><a id="logout" href="#" onclick="logout()">Logout</a></li>
+							<li><fb:login-button 
+							  id="fb-btn"
+							  scope="public_profile,email, user_birthday, user_location, user_posts"
+							  onlogin="checkLoginState();">Login
+							</fb:login-button></li>
+							<li><a href="#gsdk">Twitter</a></li>
+							<li><a href="#gsdk">Gmail</a></li>
+							<li><a href="#gsdk">Instagram</a></li>
 							<li class="divider"></li>
-							<li><a href="#gsdk">Separated link</a></li>
+							<li><a href="#gsdk">Others</a></li>
 						  </ul>
 					</li>
 					<li>
@@ -184,13 +186,7 @@
 					 </div> 
 				  </form>
 				  <ul class="nav navbar-nav navbar-right">
-						<li><a id="logout" href="#" onclick="logout()">Logout</a></li>
 						
-						<li><fb:login-button 
-							  id="fb-btn"
-							  scope="public_profile,email, user_birthday, user_location, user_posts"
-							  onlogin="checkLoginState();">
-							</fb:login-button></li>
 				   </ul>
 				  
 				</div><!-- /.navbar-collapse -->
@@ -227,12 +223,16 @@
 <!-- end container -->
 </div>
 <!-- end main -->
-<div class="container">
+
+<div class="container facebook" id="fb-container">
 	<div id="profile"></div>
 	<div id="feed"></div>
-	
 	<div class="space"></div>
-	
+</div>
+
+<div class="container tweeter" id="tw-container">
+	<button id="tweet-btn">Get Tweets</button>
+	<div id="tweet-div"></div>
 </div>
 
 <p class="text-center">Photos by Josh Spires and Jakob Owens on <a href="www.unsplash.com">Unsplash</a></p>
